@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="544" viewBox="0 0 1200 544">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0" stop-color="#0c1030"/>
+      <stop offset="0.5" stop-color="#1b1a4e"/>
+      <stop offset="1" stop-color="#241436"/>
+    </linearGradient>
+    <linearGradient id="m1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#33265e"/><stop offset="1" stop-color="#1d1638"/>
+    </linearGradient>
+    <linearGradient id="m2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#281e4c"/><stop offset="1" stop-color="#150f30"/>
+    </linearGradient>
+    <linearGradient id="m3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#181236"/><stop offset="1" stop-color="#0a0720"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#a78bfa" stop-opacity=".5"/>
+      <stop offset="1" stop-color="#a78bfa" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="544" fill="url(#sky)"/>
+  <!-- звёзды -->
+  <g fill="#cbb8ff">
+    <circle cx="80" cy="60" r="1.4" opacity=".8"/><circle cx="180" cy="110" r="1" opacity=".5"/>
+    <circle cx="300" cy="40" r="1.2" opacity=".7"/><circle cx="420" cy="90" r="1" opacity=".4"/>
+    <circle cx="540" cy="50" r="1.5" opacity=".8"/><circle cx="680" cy="100" r="1" opacity=".45"/>
+    <circle cx="800" cy="40" r="1.3" opacity=".7"/><circle cx="920" cy="80" r="1" opacity=".5"/>
+    <circle cx="1050" cy="50" r="1.2" opacity=".65"/><circle cx="1130" cy="120" r="1" opacity=".4"/>
+    <circle cx="240" cy="160" r="1" opacity=".3"/><circle cx="740" cy="150" r="1" opacity=".35"/>
+  </g>
+  <!-- луна -->
+  <circle cx="960" cy="110" r="70" fill="url(#glow)"/>
+  <circle cx="960" cy="110" r="26" fill="#e4dcff" opacity=".9"/>
+  <circle cx="952" cy="104" r="23" fill="#241436"/>
+  <!-- три слоя гор -->
+  <path d="M0 380 L140 240 L260 350 L420 210 L560 340 L720 250 L880 360 L1030 260 L1200 370 V544 H0 Z" fill="url(#m1)"/>
+  <path d="M0 430 L180 300 L360 420 L520 290 L700 400 L880 300 L1060 410 L1200 330 V544 H0 Z" fill="url(#m2)" opacity=".9"/>
+  <path d="M0 490 L200 390 L380 480 L580 380 L760 470 L960 390 L1120 480 L1200 430 V544 H0 Z" fill="url(#m3)"/>
+  <!-- туман-полосы -->
+  <g fill="#a78bfa" opacity=".07">
+    <ellipse cx="300" cy="420" rx="200" ry="14"/>
+    <ellipse cx="900" cy="400" rx="240" ry="12"/>
+    <ellipse cx="600" cy="450" rx="300" ry="16"/>
+  </g>
+</svg>

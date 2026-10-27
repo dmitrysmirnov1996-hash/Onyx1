@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="544" viewBox="0 0 1200 544">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0.2" y2="1">
+      <stop offset="0" stop-color="#2c1a4a"/>
+      <stop offset="0.5" stop-color="#4a2a5e"/>
+      <stop offset="1" stop-color="#1d1233"/>
+    </linearGradient>
+    <linearGradient id="d1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6b3a72"/><stop offset="1" stop-color="#3a2050"/>
+    </linearGradient>
+    <linearGradient id="d2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#432557"/><stop offset="1" stop-color="#220f38"/>
+    </linearGradient>
+    <linearGradient id="d3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2b1740"/><stop offset="1" stop-color="#120a25"/>
+    </linearGradient>
+    <radialGradient id="mh" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffd9a0" stop-opacity=".8"/>
+      <stop offset="1" stop-color="#ffd9a0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="544" fill="url(#sky)"/>
+  <!-- большая луна -->
+  <circle cx="240" cy="150" r="120" fill="url(#mh)"/>
+  <circle cx="240" cy="150" r="52" fill="#ffe3bd" opacity=".95"/>
+  <circle cx="220" cy="140" r="45" fill="#2c1a4a"/>
+  <!-- звёзды -->
+  <g fill="#ffd9a0">
+    <circle cx="700" cy="70" r="1.4" opacity=".7"/><circle cx="860" cy="120" r="1" opacity=".5"/>
+    <circle cx="1000" cy="60" r="1.3" opacity=".6"/><circle cx="1120" cy="130" r="1" opacity=".45"/>
+    <circle cx="600" cy="170" r="1" opacity=".4"/><circle cx="920" cy="180" r="1.1" opacity=".5"/>
+  </g>
+  <!-- дюны тремя слоями -->
+  <path d="M0 340 C 300 280, 620 380, 900 320 C 1040 292, 1140 330, 1200 310 V544 H0 Z" fill="url(#d1)"/>
+  <path d="M0 420 C 260 360, 540 460, 820 400 C 1000 364, 1120 420, 1200 400 V544 H0 Z" fill="url(#d2)" opacity=".95"/>
+  <path d="M0 490 C 300 440, 640 510, 940 460 C 1060 442, 1160 470, 1200 460 V544 H0 Z" fill="url(#d3)"/>
+  <!-- гребневый свет -->
+  <g stroke="#ffcf9a" fill="none" stroke-opacity=".35" stroke-width="2.2">
+    <path d="M0 340 C 300 280, 620 380, 900 320"/>
+    <path d="M0 420 C 260 360, 540 460, 820 400"/>
+    <path d="M0 490 C 300 440, 640 510, 940 460"/>
+  </g>
+</svg>

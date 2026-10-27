@@ -1,0 +1,16 @@
+# Бесплатный деплой Onyx одним сервисом (frontend + backend вместе)
+# 1. Залейте папку telegram-clone на GitHub
+# 2. render.com → New → Web Service → выберите репозиторий → Blueprint
+# План free: сервис засыпает после ~15 минут простоя (первый запрос будет медленным ~30с)
+
+services:
+  - type: web
+    name: onyx-chat
+    runtime: node
+    plan: free
+    healthCheckPath: /
+    buildCommand: cd web && npm install && npm run build && cd ../server && npm install
+    startCommand: cd server && npm start
+    envVars:
+      - key: NODE_VERSION
+        value: "22"

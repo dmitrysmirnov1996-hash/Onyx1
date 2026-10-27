@@ -1,0 +1,14 @@
+{
+  "name": "telegram-clone",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Telegram Clone 2026 — полноценный real-time мессенджер",
+  "scripts": {
+    "postinstall": "node scripts/install-all.mjs",
+    "dev": "node scripts/dev.mjs",
+    "build": "npm run build --prefix web",
+    "server": "npm run start --prefix server",
+    "smoke": "node web/e2e/smoke.mjs"
+  }
+}

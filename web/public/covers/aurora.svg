@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="544" viewBox="0 0 1200 544">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#050b16"/>
+      <stop offset="0.6" stop-color="#0b1a2e"/>
+      <stop offset="1" stop-color="#101c33"/>
+    </linearGradient>
+    <linearGradient id="a1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#34d399" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#34d399" stop-opacity=".38"/>
+      <stop offset="1" stop-color="#34d399" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="a2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8b5cf6" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#8b5cf6" stop-opacity=".4"/>
+      <stop offset="1" stop-color="#8b5cf6" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="a3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#60a5fa" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#60a5fa" stop-opacity=".32"/>
+      <stop offset="1" stop-color="#60a5fa" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="hill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0d1830"/><stop offset="1" stop-color="#05080f"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="544" fill="url(#sky)"/>
+  <g fill="#dff1ff">
+    <circle cx="120" cy="50" r="1.4" opacity=".7"/><circle cx="360" cy="90" r="1" opacity=".45"/>
+    <circle cx="600" cy="40" r="1.2" opacity=".6"/><circle cx="840" cy="80" r="1" opacity=".4"/>
+    <circle cx="1080" cy="60" r="1.3" opacity=".65"/><circle cx="230" cy="140" r="1" opacity=".3"/>
+    <circle cx="980" cy="140" r="1" opacity=".35"/>
+  </g>
+  <!-- аврора-ленты -->
+  <path d="M-40 260 C 200 130, 420 320, 660 180 C 860 60, 1060 260, 1240 140 V40 C 1040 200, 840 0, 640 130 C 420 260, 200 40, -40 170 Z" fill="url(#a1)"/>
+  <path d="M-40 200 C 240 90, 460 260, 700 140 C 900 40, 1080 210, 1240 110 V10 C 1060 120, 880 -40, 680 90 C 460 210, 240 10, -40 130 Z" fill="url(#a2)" opacity=".8"/>
+  <path d="M-40 340 C 220 230, 460 380, 700 260 C 900 170, 1080 330, 1240 240 V150 C 1040 280, 860 110, 660 220 C 440 340, 220 170, -40 280 Z" fill="url(#a3)" opacity=".7"/>
+  <!-- холм с ёлками-бусинами -->
+  <path d="M0 544 V460 C 200 420, 420 470, 640 440 C 860 410, 1040 460, 1200 430 V544 Z" fill="url(#hill)"/>
+  <g fill="#b9e7ff" opacity=".8">
+    <circle cx="240" cy="452" r="3"/><circle cx="360" cy="462" r="2.4"/>
+    <circle cx="520" cy="452" r="3"/><circle cx="700" cy="440" r="2.4"/>
+    <circle cx="880" cy="452" r="3"/><circle cx="1020" cy="446" r="2.4"/>
+  </g>
+</svg>
