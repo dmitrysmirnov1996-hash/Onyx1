@@ -8,7 +8,7 @@ import {
   reactionsOf, toggleReaction, pollVotesOf, castPollVote,
   insertStory, activeStories, storiesOfUser, storyById, storyViews, viewStory, shapeStory,
   insertCall, updateCall, callById, callHistory, systemMessage, releaseScheduled, cleanupExpiredStories,
-  hideMessage,
+  hideMessage, allUsers,
 } from './db.js';
 import { uid, genToken, now, deepMerge, parseJSON, validUsername, validPassword, clamp } from './util.js';
 import { genSecret, verify as totpVerify, otpauthUrl } from './totp.js';
@@ -233,6 +233,10 @@ export function buildApi(io) {
   });
 
   api.get('/users', auth, (req, res) => {
+    /* ?all=1 — телефонная книга: все зарегистрированные юзеры */
+    if (String(req.query.all ?? '') === '1') {
+      return res.json(allUsers(req.user.id).map(publicUserSafe));
+    }
     const q = String(req.query.q ?? '').trim();
     if (!q) return res.json([]);
     res.json(searchUsers(q, req.user.id).map(publicUserSafe));

@@ -218,6 +218,11 @@ export const searchUsers = (q, excludeId, limit = 12) => {
 export const hideMessage = (messageId, userId) =>
   db.prepare('INSERT OR IGNORE INTO msg_hides (message_id, user_id) VALUES (?, ?)').run(messageId, userId);
 
+/* все юзеры для телефонной книги («Контакты») */
+export const allUsers = (excludeId, limit = 300) => db.prepare(
+  `SELECT * FROM users WHERE id != ? AND EXISTS(SELECT 1 FROM users u2 WHERE u2.id = users.id) ORDER BY last_seen DESC LIMIT ?`
+).all(excludeId, limit).map(shapeUser);
+
 /* ---------- sessions ---------- */
 
 export const createSession = (token, userId, device) =>

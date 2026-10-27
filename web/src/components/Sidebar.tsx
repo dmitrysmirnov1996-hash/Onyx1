@@ -82,6 +82,7 @@ export default function Sidebar({ onOpenProfile }: { onOpenProfile?: () => void 
   const [menuOpen, setMenuOpen] = useState(false);
   const [ctx, setCtx] = useState<{ x: number; y: number; chatId: string } | null>(null);
   const searchRef = useRef<HTMLInputElement>(null);
+  const contactsMode = st.mobileTab === 'contacts';
 
   /* три последних чата — быстрые аватарки справа от поиска (как в AyuGram) */
   const quickChats = useMemo(() => st.chats.slice(0, 3), [st.chats]);
@@ -145,6 +146,9 @@ export default function Sidebar({ onOpenProfile }: { onOpenProfile?: () => void 
         )}
       </div>
 
+      {/* --- Контакты (мобильная вкладка «Контакты») --- */}
+      {contactsMode && query.length < 2 ? <ContactsPanel /> : (
+      <>
       {/* Истории */}
       {!query && <StoriesTray />}
 
@@ -219,16 +223,85 @@ export default function Sidebar({ onOpenProfile }: { onOpenProfile?: () => void 
           );
         })}
       </div>
-
+      </>
+      )}
       {menuOpen && <MenuPanel onClose={() => setMenuOpen(false)} />}
       {ctx && <ContextMenu x={ctx.x} y={ctx.y} items={menuFor(ctx.chatId)} onClose={() => setCtx(null)} />}
     </aside>
   );
 }
 
-/* ---------- Истрории-трей ---------- */
-function StoriesTray() {
+/* ---------- Контакты (телефонная книга) ---------- */
+function ContactsPanel() {
   const st = useStore();
+  const t = tFor(st.me?.settings?.language ?? 'ru');
+  const [all, setAll] = useState<any[]>([]);
+  const [busy, setBusy] = useState(true);
+  useEffect(() => {
+    api.listUsers().then((users) => setAll(users)).finally(() => setBusy(false));
+  }, []);
+  return (
+    <div className="chat-list contacts-list">
+      <div className="list-title">{t('contacts')}</div>
+      {busy && all.length === 0 ? (
+        <div className="empty-list">…</div>
+      ) : all.length === 0 ? (
+        <div className="empty-list">{t('noUsersFound')}</div>
+      ) : all.map((u) => {
+        const online = !!st.online?.has?.(u.id);
+        const seen = u.lastSeen ? new Date(u.lastSeen) : null;
+        const mins = seen ? (Date.now() - seen.getTime()) / 60000 : Infinity;
+        const sub = online ? 'в сети'
+          : mins < 60 ? 'недавно'
+          : seen ? 'был(а) ' + seen.toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+        return (
+          <div className="chat-row" key={u.id} onClick={() => {
+            st.setMobileTab('chats');
+            st.createChat('private', [u.id]).then((chat) => st.openChat(chat.id));
+          }}>
+            <Avatar user={u} size={46} story={u.stories?.length ? (u.stories.some((s: any) => !s.viewed) ? 'unseen' : 'seen') : undefined} />
+            <div className="chat-row-main">
+              <b>{u.name}</b>
+              <span className="last-msg" style={{ color: online ? 'var(--accent)' : 'var(--text2)' }}>{sub}</span>
+            </div>
+            {!st.chats.some((c) => c.type === 'private' && peerIdOfChat(c, st.me?.id ?? '') === u.id) && (
+              <button className="btn-icon sm add-user-ico" onClick={(e) => { e.stopPropagation(); st.createChat('private', [u.id]).then((chat) => st.openChat(chat.id)); }}>
+                <Icon name="plus" size={16} />
+              </button>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+/* ---------- Мобильная нижняя навигация (плавающая пилюля) ---------- */
+export function MobileNav() {
+  const st = useStore();
+  const t = tFor(st.me?.settings?.language ?? 'ru');
+  if (!st.me) return null;
+  const item = (tab: string, label: string, icon: string, onClick: () => void) => {
+    const active = tab && st.mobileTab === tab;
+    return (
+      <button key={tab} className={`m-nav-it ${active ? 'on' : ''}`} onClick={onClick}>
+        <Icon name={icon} size={22} fill={active} />
+        <span>{label}</span>
+      </button>
+    );
+  };
+  return (
+    <nav className="m-nav">
+      {item('chats', t('chats'), 'message', () => { st.setMobileTab('chats'); if (st.activeChatId) st.closeChat(); })}
+      {item('contacts', t('contacts'), 'users', () => { st.setMobileTab('contacts'); if (st.activeChatId) st.closeChat(); })}
+      {item('', t('settings'), 'settings', () => st.openModal('settings'))}
+      {item('', t('myProfile'), 'user', () => st.openModal('info-sheet'))}
+    </nav>
+  );
+}
+
+/* ---------- Истрории-трей ---------- */
+function StoriesTray() {  const st = useStore();
   const t = tFor(st.me?.settings?.language ?? 'ru');
   const byUser = useMemo(() => {
     const map = new Map<string, { user: any; stories: any[]; unseen: number }>();

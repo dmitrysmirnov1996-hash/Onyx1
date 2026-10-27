@@ -172,6 +172,9 @@ export const useStore = create<Store>((set, get): any => ({
   activeChatId: null, activeChat: null, messages: {}, msgsLoaded: {}, typing: {},
   online: new Set(), stories: [], toasts: [], modals: [], previewMsgId: null, selection: null,
   call: null, rateCall: null, replyTo: null, editing: null, connected: false,
+  /* мобильная нижняя навигация: текущая вкладка телефонной панели */
+  mobileTab: 'chats',
+  setMobileTab: (tab) => set({ mobileTab: tab }),
 
   /* ---------- auth / sync ---------- */
   async boot() {

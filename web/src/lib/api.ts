@@ -61,6 +61,7 @@ export const api = {
   resetMe: () => request('/me/reset', { method: 'POST', body: '{}' }),
   sync: () => request('/sync'),
   searchUsers: (q: string) => request('/users?q=' + encodeURIComponent(q)),
+  listUsers: () => request('/users?all=1'),
   getUser: (id: string) => request('/users/' + id),
   changePassword: (oldP: string, password: string) =>
     request('/me/password', { method: 'PATCH', body: JSON.stringify({ old: oldP, password }) }),
