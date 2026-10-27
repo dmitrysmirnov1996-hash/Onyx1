@@ -128,13 +128,7 @@ export default function Sidebar({ onOpenProfile }: { onOpenProfile?: () => void 
         <div className="search-wrap">
           <Icon name="search" size={17} className="search-ico" />
           <input ref={searchRef} value={query}
-            onChange={(e) => {
-              /* анти-автофилл: Chrome может вставить значение без фокуса (логин/пароль с других полей) — отбрасываем */
-              if (document.activeElement !== e.target) { (e.target as HTMLInputElement).value = ''; setQuery(''); return; }
-              setQuery(e.target.value);
-            }}
-            onFocus={(e) => { (e.target as HTMLInputElement).readOnly = false; }}
-            readOnly
+            onChange={(e) => setQuery(e.target.value)}
             placeholder={t('searchChats')}
             autoComplete="off" name="slime-chat-search" spellCheck={false} data-1p-ignore />
           {query && <button className="btn-icon sm" onClick={() => { setQuery(''); setFound([]); }}><Icon name="close" size={15} /></button>}
@@ -211,7 +205,7 @@ export default function Sidebar({ onOpenProfile }: { onOpenProfile?: () => void 
                 <div className="chat-row-line">
                   <span className={`last-msg ${unread ? 'unread' : ''}`}>
                     {typing ? (typing.kind === 'text' ? `${typing.name}: ${t('typingText')}` : typing.kind === 'voice' ? t('typingVoice') : t('typingFile')) :
-                      last ? (last.sender === st.me?.id ? (c.type !== 'private' ? `${t('you')}: ` : '') + ' ' + (last.pending ? '⏳ ' : '') + messageLabelOf(last) : messageLabelOf(last)) :
+                      last ? (last.sender === st.me?.id ? (c.type !== 'private' ? `${t('you')}: ` : '') + ' ' + (last.pending ? '⏳ ' : '') + messageLabelOf(last, t('deletedMsg')) : messageLabelOf(last, t('deletedMsg'))) :
                         st.chatTitle(c) === c.title ? (peer ? '@' + peer.username : '') : ''}
                   </span>
                   <span className="badges">

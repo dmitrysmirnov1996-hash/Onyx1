@@ -2792,39 +2792,11 @@ b, .modal-title, .chat-head-titles b, .section-title { letter-spacing: .002em; }
 }
 
 /* ============================================================= */
-/* ============ GUI v7 «NOIR» — трансплантация идентичности (fusión) ============ */
-/* ======== графитовый не́йтра́л + ирис вместо slime-зелёного, === */
-/* ============ жёсткое !important — перекрывает и inline-палитру ============ */
+/* ============ GUI v7 «NOIR» — идентичность ============ */
+/* Палитра «графит + ирис» переехала в web/src/lib/theme.ts (applyTheme),
+   чтобы настройки темы/акцента из UI реально применялись.
+   Жёсткие !important-переопределения удалены — они блокировали их. */
 /* ============================================================= */
-:root {
-  /* фирменная поверхность: нейтральный графит (было — зелёный мясной) */
-  --bg: #0b0d12 !important;
-  --bg-base: #0b0d12 !important;
-  --sidebar: #0e1117 !important;
-  --surface: #14171e !important;
-  --surface2: #1a1e26 !important;
-  --surface3: #212630 !important;
-  --text: #edf0f6 !important;
-  --text2: #98a1b3 !important;
-  --border: rgba(158, 168, 200, .085) !important;
-  --hover: rgba(139, 92, 246, .08) !important;
-  --glass: rgba(17, 20, 27, .74) !important;
-  --scrollbar: rgba(255, 255, 255, .15) !important;
-  --overlay: rgba(3, 4, 8, .6) !important;
-
-  /* НАОВЫЙ фирменный акцент: ирис */
-  --accent: #8b5cf6 !important;
-  --accentText: #fff !important;
-  --slime-grad: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 50%, #7345e6 100%) !important;
-  --slime-glow: 0 2px 10px color-mix(in srgb, #8b5cf6 24%, transparent) !important;
-
-  /* пузыри в новой идентичности */
-  --bubble-out: color-mix(in srgb, #8b5cf6 26%, #131017) !important;
-  --bubble-out-text: #f4f1ff !important;
-  --bubble-in: color-mix(in srgb, var(--text) 7%, var(--surface)) !important;
-  --bubble-in-text: #edf0f6 !important;
-  --outCheck: #c4b5fd !important;
-}
 /* кольца историй следуют акценту (был жёсткий зелёный) */
 .story-ring { background: var(--accent) !important; }
 .story-add { background: var(--accent) !important; }
@@ -2840,20 +2812,20 @@ b, .modal-title, .chat-head-titles b, .section-title { letter-spacing: .002em; }
 
 /* --- no-cover шапка вкладок: профиль подстёган под noir --- */
 .info-sheet:not(:has(.ih-cover))::before {
-  background: linear-gradient(180deg, color-mix(in srgb, #8b5cf6 16%, transparent) 0%, transparent 90%);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 16%, transparent) 0%, transparent 90%);
 }
 
 /* --- рамки-сезоны остаются разноцветными (декор), но центр в ирисе --- */
 .frame-stage::before {
-  background: radial-gradient(circle, color-mix(in srgb, #8b5cf6 17%, transparent) 0%, transparent 60%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 17%, transparent) 0%, transparent 60%);
 }
 
 /* --- ринг фокуса и выделение — ирисовые --- */
 .inp:focus, .field input:focus, .field textarea:focus, .search-wrap:focus-within {
-  border-color: color-mix(in srgb, #8b5cf6 55%, transparent) !important;
-  box-shadow: 0 0 0 3px color-mix(in srgb, #8b5cf6 16%, transparent) !important;
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent) !important;
 }
-::selection { background: color-mix(in srgb, #8b5cf6 40%, transparent) !important; }
+::selection { background: color-mix(in srgb, var(--accent) 40%, transparent) !important; }
 
 /* ============ composer: скроллбар при печати не показываем ============ */
 .composer textarea { scrollbar-width: none; -ms-overflow-style: none; }

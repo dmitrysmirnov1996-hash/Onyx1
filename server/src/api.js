@@ -8,6 +8,7 @@ import {
   reactionsOf, toggleReaction, pollVotesOf, castPollVote,
   insertStory, activeStories, storiesOfUser, storyById, storyViews, viewStory, shapeStory,
   insertCall, updateCall, callById, callHistory, systemMessage, releaseScheduled, cleanupExpiredStories,
+  hideMessage,
 } from './db.js';
 import { uid, genToken, now, deepMerge, parseJSON, validUsername, validPassword, clamp } from './util.js';
 import { genSecret, verify as totpVerify, otpauthUrl } from './totp.js';
@@ -464,6 +465,7 @@ export function buildApi(io) {
       before: Number(req.query.before ?? Number.MAX_SAFE_INTEGER),
       limit: clamp(Number(req.query.limit ?? 60), 1, 100),
       search: String(req.query.search ?? ''),
+      forUser: req.user.id,
     });
     res.json({ ...page, messages: attachMeta(page.messages) });
   });
@@ -545,11 +547,12 @@ export function buildApi(io) {
     if (forAll) {
       db.prepare(`UPDATE messages SET deleted = 1, text = '', media = 'null', edits = 'null', pinned = 0 WHERE id = ?`).run(msg.id);
       if (chat?.pinnedMsg === msg.id) { db.prepare('UPDATE chats SET pinned_msg = NULL WHERE id = ?').run(msg.chatId); }
+      emitChat(msg.chatId, 'msg:update', newMsgPayload(msgById(msg.id) ?? { ...msg, deleted: true, text: '', media: null }));
     } else {
-      db.prepare('DELETE FROM reactions WHERE message_id = ?').run(msg.id);
-      db.prepare('DELETE FROM messages WHERE id = ?').run(msg.id);
+      /* «удалить у себя»: скрываем сообщение только для этого юзера */
+      hideMessage(msg.id, req.user.id);
+      emitToUser(req.user.id, 'msg:remove', { chatId: msg.chatId, id: msg.id });
     }
-    emitChat(msg.chatId, 'msg:update', newMsgPayload(msgById(msg.id) ?? { ...msg, deleted: true }));
     res.json({ ok: true });
   });
 

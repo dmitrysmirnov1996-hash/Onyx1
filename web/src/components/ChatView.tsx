@@ -185,9 +185,10 @@ export default function ChatView() {
               ))}
             </div>
           )}
-          {messages.map((m, i) => {
-            const prev = messages[i - 1];
-            const next = messages[i + 1];
+          {/* удалённые «у всех» сообщения в ленте не показываем */}
+          {messages.filter((m) => !m.deleted).map((m, i, arr) => {
+            const prev = arr[i - 1];
+            const next = arr[i + 1];
             const showDate = !prev || dayKey(prev.createdAt) !== dayKey(m.createdAt);
             const showTime = (m.createdAt - (prev?.createdAt ?? 0)) > 30 * 60 * 1000;
             const own = m.sender === st.me?.id;
@@ -200,7 +201,6 @@ export default function ChatView() {
               && (m.createdAt - prev.createdAt) <= 5 * 60 * 1000;
             const showAv = own ? false : !chainPrev;
 
-            const groupedMsgs = messages.filter((x) => x.id === m.id);
             const isSel = st.selection?.includes(m.id);
             const canDelete = m.sender === st.me?.id;
             return (

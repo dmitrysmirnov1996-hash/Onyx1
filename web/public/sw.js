@@ -1,5 +1,5 @@
 /* Onyx service worker: cache-first для статики, сеть для данных */
-const VERSION = 'onyx-v1';
+const VERSION = 'onyx-v2';
 const PRECACHE = [
   '/',
   '/favicon.svg',

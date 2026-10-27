@@ -102,7 +102,8 @@ export interface Store {
   uploads: (file: File | Blob, name: string, meta?: any) => Promise<UploadResult>;
 }
 
-export function messageLabelOf(m: Message): string {
+export function messageLabelOf(m: Message, deletedLabel = 'Удалённое сообщение'): string {
+  if (m.deleted) return deletedLabel;
   switch (m.type) {
     case 'photo': return '📷 ' + (m.text || 'Фотография');
     case 'video': return '🎞 ' + (m.text || 'Видео');
@@ -132,7 +133,7 @@ let pendingId = -1;
 function nextPendingId() { return pendingId--; }
 
 const emptySettings: UserSettings = {
-  theme: 'dark', accent: '#2ad46e', language: 'ru', fontSize: 15, uiScale: 100,
+  theme: 'dark', accent: '', language: 'ru', fontSize: 15, uiScale: 100,
   animations: true, sounds: true, browserNotif: true, bubbleRadius: 16,
   bubbleColorMine: '', avatarShape: 'circle', avatarFrame: { style: 'none', color: '' },
   wallpaper: null, privacy: { lastSeen: 'all', online: true }, notifSound: 'chime',
@@ -439,7 +440,26 @@ export const useStore = create<Store>((set, get): any => ({
     try { await api.editMessage(id, text); set({ editing: null }); } catch {}
   },
   async deleteMsg(id, forAll) {
-    try { await api.deleteMessage(id, forAll); } catch {}
+    const st = get();
+    /* оптимистично: «удалить у меня» — убираем у себя сразу, «у всех» — тумбстоун,
+       который лента не отрисовывает; при ошибке откатываемся к исходному состоянию */
+    const originals: Record<string, Message[]> = {};
+    let touched = false;
+    const lists: Record<string, Message[]> = { ...st.messages };
+    for (const [cid, list] of Object.entries(lists)) {
+      const i = (list ?? []).findIndex((m) => m.id === id);
+      if (i === -1) continue;
+      originals[cid] = list;
+      const nl = [...list];
+      if (forAll) nl[i] = { ...nl[i], deleted: true, text: '', media: null, reactions: [] } as Message;
+      else nl.splice(i, 1);
+      lists[cid] = nl;
+      touched = true;
+    }
+    if (touched) set({ messages: lists });
+    try { await api.deleteMessage(id, forAll); } catch {
+      if (touched) set({ messages: { ...get().messages, ...originals } });
+    }
   },
   async pinMsg(id, pin) {
     try { await api.pinMessage(id, pin); } catch {}
@@ -638,6 +658,15 @@ function socketConnect() {
     if (c?.lastMessage?.id === message.id) {
       useStore.setState({ chats: useStore.getState().chats.map((x) => x.id === chatId ? { ...x, lastMessage: message } : x) });
     }
+  });
+
+  /* «удалить только у меня»: сервер присылает событие не в комнату чата,
+     а личному юзеру — в списке сообщений сообщение просто исчезает */
+  socket.on('msg:remove', ({ chatId, id }: any) => {
+    const st = useStore.getState();
+    const list = st.messages[chatId];
+    if (!list) return;
+    useStore.setState({ messages: { ...st.messages, [chatId]: list.filter((m) => m.id !== id) } });
   });
 
   socket.on('read', ({ chatId, userId, lastId }: any) => {

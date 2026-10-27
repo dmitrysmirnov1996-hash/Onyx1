@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { useStore } from '../lib/store';
 import { tFor } from '../lib/i18n';
 import { Modal, Slider, Toggle, Icon } from './common';
-import { GRADIENT_PRESETS, patternURI, effectiveDark } from '../lib/theme';
+import { GRADIENT_PRESETS, patternURI, effectiveDark, resolveAccent } from '../lib/theme';
 import { imageMeta, videoMeta } from '../lib/media';
 import type { Wallpaper } from '../lib/types';
 
@@ -22,15 +22,16 @@ export function WallpaperLayer({ chatId }: { chatId: string }) {
     setParallax({ x: nx * (wp.parallax ?? 0), y: ny * (wp.parallax ?? 0) });
   };
 
-  const uri = useMemo(() => patternURI(dark), [dark]);
+  const accent = resolveAccent(st.me!.settings);
+  const uri = useMemo(() => patternURI(dark, 1, accent), [dark, accent]);
 
   /* явный «Узор» — прежнее поведение с объектами */
   if (wp?.mode === 'pattern') {
     return <div className="wallpaper" style={{ backgroundImage: uri, backgroundSize: '420px', transition: 'background .3s' }} />;
   }
-  /* дефолт (обои не выбраны или пустой объект) — ровный тёмный фон БЕЗ объектов */
+  /* дефолт (обои не выбраны или пустой объект) — ровный фирменный фон БЕЗ объектов */
   if (!wp || (!wp.url && !wp.gradient)) {
-    return <div className="wallpaper" style={{ background: dark ? 'linear-gradient(180deg,#17212b,#0e1621)' : 'linear-gradient(180deg,#ffffff,#e8edf1)', transition: 'background .3s' }} />;
+    return <div className="wallpaper" style={{ background: dark ? 'linear-gradient(180deg,#14171e,#0b0d12)' : 'linear-gradient(180deg,#ffffff,#e8eaf1)', transition: 'background .3s' }} />;
   }
 
   const filter = `brightness(${wp.brightness ?? 100}%) blur(${wp.blur ?? 0}px) saturate(${wp.saturate ?? 100}%)`;
@@ -140,7 +141,7 @@ export default function WallpaperEditor({ chatId }: { chatId: string }) {
       {/* Превью */}
       <div className="wp-preview">
         {wp.mode === 'pattern' || (!wp.url && !wp.gradient) ? (
-          <div style={{ position: 'absolute', inset: 0, background: effectiveDark(st.me!.settings) ? 'linear-gradient(180deg,#17212b,#0e1621)' : 'linear-gradient(180deg,#ffffff,#e8edf1)' }} />
+          <div style={{ position: 'absolute', inset: 0, background: effectiveDark(st.me!.settings) ? 'linear-gradient(180deg,#14171e,#0b0d12)' : 'linear-gradient(180deg,#ffffff,#e8eaf1)' }} />
         ) : wp.mode === 'gradient' && wp.gradient ? (
           <div className={`wp-gradient ${wp.gradientAnim ? 'anim' : ''}`} style={{ background: wp.gradient, animationDuration: wp.gradientAnim ? `${80 / (wp.speed ?? 1)}s` : undefined }} />
         ) : wp.kind === 'video' ? (

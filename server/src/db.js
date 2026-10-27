@@ -74,6 +74,11 @@ CREATE TABLE IF NOT EXISTS messages (
   send_at INTEGER,
   sent INTEGER DEFAULT 1
 );
+CREATE TABLE IF NOT EXISTS msg_hides (
+  message_id INTEGER NOT NULL,
+  user_id TEXT NOT NULL,
+  PRIMARY KEY (message_id, user_id)
+);
 CREATE INDEX IF NOT EXISTS idx_msg_chat ON messages (chat_id, id);
 CREATE TABLE IF NOT EXISTS reactions (
   message_id INTEGER NOT NULL,
@@ -152,7 +157,7 @@ export const shapeUser = (row) => row && ({
 export function getDefaultSettings() {
   return {
     theme: 'dark',
-    accent: '#3390ec',
+    accent: '#8b5cf6',
     language: 'ru',
     fontSize: 15,
     chatFontSize: 15,
@@ -199,9 +204,19 @@ export const updateUser = (id, fields) => {
   return userByField('id', id);
 };
 
-export const searchUsers = (q, excludeId, limit = 12) => db.prepare(
-  `SELECT * FROM users WHERE (username LIKE ? OR name LIKE ?) AND id != ? ORDER BY username LIMIT ?`
-).all(`%${q}%`, `%${q}%`, excludeId, limit).map(shapeUser);
+export const searchUsers = (q, excludeId, limit = 12) => {
+  const like = `%${q.trim()}%`;
+  const low = `%${q.trim().toLowerCase()}%`;
+  return db.prepare(
+    `SELECT * FROM users
+     WHERE (username LIKE ? OR LOWER(name) LIKE ?) AND id != ?
+     ORDER BY username LIMIT ?`
+  ).all(like, low, excludeId, limit).map(shapeUser);
+};
+
+/* «удалить у себя»: скрываем сообщение только для одного юзера */
+export const hideMessage = (messageId, userId) =>
+  db.prepare('INSERT OR IGNORE INTO msg_hides (message_id, user_id) VALUES (?, ?)').run(messageId, userId);
 
 /* ---------- sessions ---------- */
 
@@ -350,9 +365,11 @@ export function shapeMessage(row) {
   return msg;
 }
 
-export function messagesPage(chatId, { before = Number.MAX_SAFE_INTEGER, limit = 60, search = '' } = {}) {
+export function messagesPage(chatId, { before = Number.MAX_SAFE_INTEGER, limit = 60, search = '', forUser = '' } = {}) {
   let sql = 'SELECT * FROM messages WHERE chat_id = ? AND sent = 1 AND id < ?';
   const params = [chatId, before];
+  /* скрытые этим юзером («удалить у себя») не отдаём */
+  if (forUser) { sql += ' AND id NOT IN (SELECT message_id FROM msg_hides WHERE user_id = ?)'; params.push(forUser); }
   if (search) { sql += ' AND text LIKE ?'; params.push(`%${search}%`); }
   sql += ' ORDER BY id DESC LIMIT ?';
   params.push(limit);
