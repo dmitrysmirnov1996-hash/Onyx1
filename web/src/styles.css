@@ -1365,7 +1365,7 @@ body.glass-more { --glass-alpha: .45; --glass-blur: 26px; }
 
 /* фирменные константы пасса: зелёная слизь */
 :root {
-  --slime-grad: linear-gradient(135deg, #5ff09a 0%, #2ad46e 46%, #12a75c 100%);
+  --slime-grad: linear-gradient(135deg, color-mix(in srgb, var(--accent) 55%, #fff) 0%, var(--accent) 48%, color-mix(in srgb, var(--accent) 72%, #000) 100%);
   --slime-glow: 0 8px 26px color-mix(in srgb, var(--accent) 36%, transparent);
   --slime-r: 18px;
 }
@@ -1447,7 +1447,7 @@ body {
 }
 .settings-modal .modal-title { display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 800; letter-spacing: .01em; }
 .settings-modal .modal-title::before {
-  content: ''; width: 24px; height: 24px; background: url('/favicon.svg') center / contain no-repeat;
+  content: ''; width: 24px; height: 24px; background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20100%20100%27%3E%0A%3Cdefs%3E%0A%3ClinearGradient%20id%3D%27of%27%20x1%3D%270.18%27%20y1%3D%270%27%20x2%3D%270.85%27%20y2%3D%271%27%3E%3Cstop%20offset%3D%270%27%20stop-color%3D%27%232b3140%27%2F%3E%3Cstop%20offset%3D%270.55%27%20stop-color%3D%27%2314161f%27%2F%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%230a0b10%27%2F%3E%3C%2FlinearGradient%3E%0A%3ClinearGradient%20id%3D%27or%27%20x1%3D%270%27%20y1%3D%270%27%20x2%3D%271%27%20y2%3D%271%27%3E%3Cstop%20offset%3D%270%27%20stop-color%3D%27%23d8c9ff%27%20stop-opacity%3D%27.95%27%2F%3E%3Cstop%20offset%3D%270.5%27%20stop-color%3D%27%239d6bff%27%2F%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%23c4b5fd%27%2F%3E%3C%2FlinearGradient%3E%0A%3CradialGradient%20id%3D%27oc%27%3E%3Cstop%20offset%3D%270%27%20stop-color%3D%27%23f1eaff%27%2F%3E%3Cstop%20offset%3D%270.42%27%20stop-color%3D%27%238b5cf6%27%20stop-opacity%3D%27.9%27%2F%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%238b5cf6%27%20stop-opacity%3D%270%27%2F%3E%3C%2FradialGradient%3E%0A%3C%2Fdefs%3E%0A%3Cg%20transform%3D%27rotate(6%2050%2050)%27%3E%0A%3Cpath%20d%3D%27M50%2012%20L77%2035%20V61%20L50%2088%20L23%2061%20V35%20Z%27%20fill%3D%27url(%23of)%27%2F%3E%0A%3Cpath%20d%3D%27M50%2012%20L33%2041%20M50%2012%20L67%2041%20M77%2035%20L67%2041%20M23%2035%20L33%2041%20M50%2088%20L33%2061%20M50%2088%20L67%2061%20M33%2041%20H67%20V61%20H33%20Z%27%20fill%3D%27none%27%20stroke%3D%27%23ffffff%27%20stroke-opacity%3D%27.1%27%20stroke-width%3D%271.4%27%2F%3E%0A%3Cpath%20d%3D%27M50%2012%20L33%2041%20L33%2061%20L50%2088%20Z%27%20fill%3D%27%23c4b5fd%27%20opacity%3D%27.8%27%2F%3E%0A%3Cpath%20d%3D%27M50%2012%20L77%2035%20V61%20L50%2088%20L23%2061%20V35%20Z%27%20fill%3D%27none%27%20stroke%3D%27url(%23or)%27%20stroke-width%3D%272.4%27%20stroke-linejoin%3D%27round%27%2F%3E%0A%3Ccircle%20cx%3D%2750%27%20cy%3D%2750%27%20r%3D%2710%27%20fill%3D%27url(%23oc)%27%2F%3E%0A%3C%2Fg%3E%3C%2Fsvg%3E") center / contain no-repeat;
   filter: drop-shadow(0 3px 8px color-mix(in srgb, var(--accent) 38%, transparent));
 }
 .settings-modal .modal-body { padding: 0; }
@@ -3063,6 +3063,56 @@ b, .modal-title, .chat-head-titles b, .section-title { letter-spacing: .002em; }
   .chat-row .avatar { width: 46px !important; height: 46px !important; }
 }
 
+
+/* ============================================================= */
+/* ============ Редактор фонов (модалка) — полноценная вёрстка ============ */
+/* ============================================================= */
+.wp-preview {
+  position: relative; height: 190px; border-radius: 14px; overflow: hidden;
+  border: 1px solid var(--border); background: var(--surface2); margin: 4px 0 10px;
+}
+.wp-preview .wp-sample-bubbles {
+  position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end;
+  gap: 6px; padding: 10px 12px 12px; pointer-events: none;
+}
+.wp-sample-bubble {
+  max-width: 72%; padding: 6px 11px; font-size: 12.5px; line-height: 1.35; border-radius: var(--bubble-radius, 14px);
+}
+.wp-sample-bubble.in { align-self: flex-start; background: var(--bubble-in); color: var(--bubble-in-text); border-bottom-left-radius: 6px; }
+.wp-sample-bubble.out { align-self: flex-end; background: var(--bubble-out); color: var(--bubble-out-text); border-bottom-right-radius: 6px; }
+.tabs { display: flex; gap: 6px; margin: 2px 0 10px; }
+.tabs button {
+  flex: 1; padding: 9px 6px; border-radius: 10px; font-size: 13px; font-weight: 600;
+  background: transparent; color: var(--text2); border: 1px solid var(--border);
+  transition: background .13s, color .13s, border-color .13s;
+}
+.tabs button:hover { background: var(--hover); color: var(--text); }
+.tabs button.on {
+  background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+}
+.wp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); gap: 8px; }
+.wp-tile {
+  aspect-ratio: 1; border-radius: 12px; cursor: pointer; display: grid; place-items: center;
+  border: 2px solid color-mix(in srgb, var(--border) 70%, transparent);
+  transition: transform .12s, border-color .13s, box-shadow .13s; overflow: hidden; color: #fff; font-size: 12px;
+}
+.wp-tile:hover { transform: scale(1.04); }
+.wp-tile.sel { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 28%, transparent); }
+.wp-tile.pattern { background: var(--surface2); color: var(--text2); font-weight: 600; font-size: 11.5px; padding: 6px; text-align: center; }
+.wp-upload-row { display: flex; gap: 8px; flex-wrap: wrap; padding: 4px 0; }
+.wp-adjust { display: flex; flex-direction: column; gap: 2px; padding: 2px 0; }
+.pos-picker { display: flex; gap: 6px; }
+.pos-picker button {
+  width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center;
+  background: var(--surface2); color: var(--text2); transition: background .13s, color .13s;
+}
+.pos-picker button.on { background: color-mix(in srgb, var(--accent) 22%, transparent); color: var(--accent); }
+/* ровный низ модалки опроса */
+.poll-foot { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+.opt-row { margin-top: 8px; }
+/* отложенное сообщение: аккуратная ширина и ряд кнопок */
+.sched-foot { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
 /* ============================================================= */
 /* ============ Спокойные вход/регистрация: приглушены яркое свечение и пятна ============ */
 /* ============================================================= */
@@ -3078,3 +3128,16 @@ b, .modal-title, .chat-head-titles b, .section-title { letter-spacing: .002em; }
 .splash-mark, .auth-mark, .empty-mark { filter: drop-shadow(0 10px 20px color-mix(in srgb, var(--accent) 12%, transparent)) !important; }
 .auth-name { letter-spacing: .14em; }
 .auth-card .btn.primary { box-shadow: 0 2px 10px color-mix(in srgb, var(--accent) 22%, transparent); }
+
+/* ============================================================= */
+/* ============ Дефолты до применения темы (экран входа): тёмный NOIR + ирис ============ */
+/* ============================================================= */
+:root {
+  --bg: #0b0d12; --bg-base: #0b0d12; --sidebar: #0e1117; --surface: #14171e; --surface2: #1a1e26; --surface3: #212630;
+  --text: #edf0f6; --text2: #98a1b3; --border: rgba(158, 168, 200, .085); --hover: rgba(139, 92, 246, .08);
+  --glass: rgba(17, 20, 27, .74); --scrollbar: rgba(255, 255, 255, .15); --overlay: rgba(3, 4, 8, .6);
+  --accent: #8b5cf6; --accentText: #fff;
+  --bubble-in: color-mix(in srgb, var(--text) 7%, var(--surface)); --bubble-in-text: #edf0f6;
+  --bubble-out: color-mix(in srgb, var(--accent) 26%, #131017); --bubble-out-text: #f4f1ff;
+  --outCheck: #c4b5fd;
+}

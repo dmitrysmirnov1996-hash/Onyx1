@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useStore } from '../lib/store';
 import { tFor } from '../lib/i18n';
 import { Modal, Avatar, Icon, Slider, Toggle, ColorInput, type MenuItem } from './common';
-import { ACCENT_PRESETS, PALETTES, GRADIENT_PRESETS, effectiveDark } from '../lib/theme';
+import { ACCENT_PRESETS, GRADIENT_PRESETS, effectiveDark } from '../lib/theme';
 import { api } from '../lib/api';
 import { sound } from '../lib/media';
 import { getPasscode, setPasscode, lockNow, pinHash, type PasscodeConf } from './Passcode';

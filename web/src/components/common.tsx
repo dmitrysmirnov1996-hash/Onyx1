@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useLayoutEffect, createContext, useContext } from 'react';
+import { createPortal } from 'react-dom';
 import type { PublicUser } from '../lib/types';
 import { NICE_ICONS } from '../lib/niceIcons';
 
@@ -1007,7 +1008,10 @@ export function Modal({
     return () => window.removeEventListener('keydown', h);
   }, [onClose]);
 
-  return (
+  /* Portal в body: модалки внутри стеклянных контейнеров (композер/шапка чата
+     имеют backdrop-filter/transform) иначе позиционируются не от окна, а от
+     контейнера — модалка «прилипает» низко и криво (отложенное сообщение) */
+  return createPortal(
     <div className="modal-back" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <div className={`modal glass ${className ?? ''}`} style={{ maxWidth: width }} onMouseDown={(e) => e.stopPropagation()}>
         {title != null && (
@@ -1019,7 +1023,8 @@ export function Modal({
         <div className="modal-body">{children}</div>
         {footer && <div className="modal-foot">{footer}</div>}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 

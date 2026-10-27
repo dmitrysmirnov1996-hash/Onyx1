@@ -267,13 +267,15 @@ export function PollCreate({ chatId }: { chatId: string }) {
           {i > 1 && <button className="btn-icon" onClick={() => setOptions(options.filter((_, j) => j !== i))}><Icon name="close" size={15} /></button>}
         </div>
       ))}
-      <button className="btn sec sm" onClick={() => setOptions([...options, ''])}><Icon name="plus" size={15} /> {t('addOpt')}</button>
-      <button className="btn primary big" disabled={!canSend || busy} onClick={async () => {
-        setBusy(true);
-        await st.sendMsg(chatId, { type: 'poll', text: '', media: { question, options: options.filter((o) => o.trim()) } });
-        setBusy(false);
-        st.closeModal();
-      }}>{busy ? t('loading') : t('send')}</button>
+      <div className="poll-foot">
+        <button className="btn sec sm grow" onClick={() => setOptions([...options, ''])}><Icon name="plus" size={15} /> {t('addOpt')}</button>
+        <button className="btn primary big" style={{ flex: '0 0 auto', minWidth: 130 }} disabled={!canSend || busy} onClick={async () => {
+          setBusy(true);
+          await st.sendMsg(chatId, { type: 'poll', text: '', media: { question, options: options.filter((o) => o.trim()) } });
+          setBusy(false);
+          st.closeModal();
+        }}>{busy ? t('loading') : t('send')}</button>
+      </div>
     </Modal>
   );
 }
