@@ -7,6 +7,7 @@ import { existsSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildApi } from './api.js';
+import { initBackup, startBackupLoop } from './backup.js';
 import {
   db, userByField, updateUser, cleanupExpiredStories,
   sessionByToken, touchSession, shapeUser, publicUser,
@@ -30,6 +31,9 @@ app.use('/uploads', express.static(join(__dirname, '..', '..', 'uploads'), { max
 
 const { api, ensureChatsJoined, emitToUser, emitChat, emitForceLogout } = buildApi(io);
 app.use('/api', api);
+
+/* ---------- персистентность: восстановление/бэкапы БД в GitHub ---------- */
+initBackup().then(() => startBackupLoop()).catch((e) => console.error('[backup] init:', e.message));
 
 /* ---------- upload (отдельный роут) ---------- */
 const EXT = {
