@@ -3062,3 +3062,19 @@ b, .modal-title, .chat-head-titles b, .section-title { letter-spacing: .002em; }
   .btn { min-height: 44px !important; }
   .chat-row .avatar { width: 46px !important; height: 46px !important; }
 }
+
+/* ============================================================= */
+/* ============ Спокойные вход/регистрация: приглушены яркое свечение и пятна ============ */
+/* ============================================================= */
+.auth-screen {
+  background:
+    radial-gradient(1100px 560px at 70% -12%, color-mix(in srgb, var(--accent) 7%, transparent), transparent),
+    var(--bg);
+  animation: none;
+}
+.auth-decor { opacity: .2; filter: blur(72px); }
+.auth-decor.a { background: color-mix(in srgb, var(--accent) 20%, transparent); }
+.auth-decor.b { background: color-mix(in srgb, var(--accent) 12%, transparent); top: auto; }
+.splash-mark, .auth-mark, .empty-mark { filter: drop-shadow(0 10px 20px color-mix(in srgb, var(--accent) 12%, transparent)) !important; }
+.auth-name { letter-spacing: .14em; }
+.auth-card .btn.primary { box-shadow: 0 2px 10px color-mix(in srgb, var(--accent) 22%, transparent); }
