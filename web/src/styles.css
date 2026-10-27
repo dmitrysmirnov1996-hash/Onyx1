@@ -3039,3 +3039,54 @@ b, .modal-title, .chat-head-titles b, .section-title { letter-spacing: .002em; }
   .composer textarea { min-height: 40px; }
   .call-round { width: 46px; height: 46px; }
 }
+
+/* ============================================================= */
+/* ===== MOBILE v3 — жёсткое подразделение: телефон и всё ====== */
+/* Телефонные вьюпорты бывают и по 980px (десктопный UA), поэтому */
+/* критические свойства дублируются с !important и по pointer.   */
+/* ============================================================= */
+
+@media (max-width: 900px), ((hover: none) and (pointer: coarse)) {
+  /* --- сайдбар: занимаетwhole весь экран всегда --- */
+  .sidebar {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    flex: 1 1 auto !important;
+    border-right: none !important;
+  }
+  .app.chat-opened .sidebar { display: none !important; }
+
+  /* --- чат и пустой экран тоже во всю ширину --- */
+  .chat-view { width: 100% !important; max-width: 100% !important; }
+  .empty-state { width: 100% !important; max-width: 100% !important; }
+  .empty-inner { max-width: 92% !important; }
+
+  /* --- модалки: по-настоящему на весь экран --- */
+  .modal-back { padding: 0 !important; place-items: stretch !important; display: block !important; }
+  .modal-back > .modal,
+  .modal {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    width: 100dvw !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    border-radius: 0 !important;
+    inset: 0 !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+  }
+  .settings-layout { height: 100% !important; }
+
+  /* --- сжатые шапки --- */
+  .sidebar-top { height: 58px !important; padding-top: max(10px, env(safe-area-inset-top)) !important; }
+  .chat-head { padding-top: max(6px, env(safe-area-inset-top)) !important; height: 58px !important; }
+  .composer { padding-bottom: max(11px, env(safe-area-inset-bottom)) !important; }
+  .composer textarea { font-size: 16px !important; }
+
+  /* --- крупные тач-цели --- */
+  .btn-icon { width: 40px !important; height: 40px !important; }
+  .btn { min-height: 44px !important; }
+  .chat-row .avatar { width: 46px !important; height: 46px !important; }
+}
