@@ -3160,6 +3160,7 @@ b, .modal-title, .chat-head-titles b, .section-title { letter-spacing: .002em; }
     max-width: calc(100vw - 20px); width: min(420px, calc(100vw - 20px));
   }
   .app.chat-opened .m-nav { display: none !important; }
+  body.modal-open .m-nav { display: none !important; }
   .m-nav-it {
     flex: 1; height: 52px; border: 0; background: transparent; border-radius: 999px; cursor: pointer;
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;

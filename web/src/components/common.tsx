@@ -1005,7 +1005,12 @@ export function Modal({
   useEffect(() => {
     const h = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', h);
-    return () => window.removeEventListener('keydown', h);
+    /* навигационная пилюля должна прятаться под полноэкранной модалкой */
+    document.body.classList.add('modal-open');
+    return () => {
+      window.removeEventListener('keydown', h);
+      document.body.classList.remove('modal-open');
+    };
   }, [onClose]);
 
   /* Portal в body: модалки внутри стеклянных контейнеров (композер/шапка чата
