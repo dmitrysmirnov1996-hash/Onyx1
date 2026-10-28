@@ -5,7 +5,7 @@ import { applyTheme, effectiveDark } from './lib/theme';
 import { Toasts, Icon } from './components/common';
 import Auth from './components/Auth';
 import Sidebar from './components/Sidebar';
-import { MobileNav } from './components/Sidebar';
+import { MobileNav, MobileFab } from './components/Sidebar';
 import ChatView from './components/ChatView';
 import CallOverlay, { callManager, RateCall } from './components/CallOverlay';
 import { PasscodeGuard } from './components/Passcode';
@@ -83,6 +83,7 @@ export default function App() {
       <Sidebar />
       {st.activeChatId ? <ChatView /> : <EmptyState t={t} />}
       <MobileNav />
+      <MobileFab />
       {st.modals.map((m, i) => (
         <ModalRouter key={i} name={m.name} params={m.params!} />
       ))}

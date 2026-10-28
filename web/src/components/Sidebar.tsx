@@ -276,6 +276,17 @@ function ContactsPanel() {
   );
 }
 
+/* ---------- Мобильная плавающая кнопка «+» (новое сообщение) ---------- */
+export function MobileFab() {
+  const st = useStore();
+  if (!st.me) return null;
+  return (
+    <button className="fabs" aria-label="new-message" onClick={() => st.openModal('user-picker', { type: 'private' })}>
+      <Icon name="edit" size={24} />
+    </button>
+  );
+}
+
 /* ---------- Мобильная нижняя навигация (плавающая пилюля) ---------- */
 export function MobileNav() {
   const st = useStore();
